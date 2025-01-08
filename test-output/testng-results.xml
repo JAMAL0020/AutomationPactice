@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="7" total="8" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-01-07T23:44:36 EET" name="Default suite" finished-at="2025-01-07T23:45:00 EET" duration-ms="23956">
+    <groups>
+    </groups>
+    <test started-at="2025-01-07T23:44:36 EET" name="Default test" finished-at="2025-01-07T23:45:00 EET" duration-ms="23956">
+      <class name="MyTestCases">
+        <test-method is-config="true" signature="mySetup()[pri:0, instance:MyTestCases@23aa363a]" started-at="2025-01-07T23:44:36 EET" name="mySetup" finished-at="2025-01-07T23:45:00 EET" duration-ms="23675" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- mySetup -->
+        <test-method signature="Web_Table_Example()[pri:8, instance:MyTestCases@23aa363a]" started-at="2025-01-07T23:45:00 EET" name="Web_Table_Example" description="play with the data of the colum" finished-at="2025-01-07T23:45:00 EET" duration-ms="261" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Web_Table_Example -->
+      </class> <!-- MyTestCases -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
