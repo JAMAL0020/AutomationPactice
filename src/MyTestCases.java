@@ -1,18 +1,23 @@
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.By.ByXPath;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+
+import net.bytebuddy.implementation.bytecode.ByteCodeAppender.Size;
 
 public class MyTestCases {
 
@@ -23,12 +28,17 @@ public class MyTestCases {
 	Random rand = new Random();
 
 	JavascriptExecutor Js = (JavascriptExecutor) driver;
+	
+	// this is related to test #11
+	Actions action = new Actions (driver);
 
 	@BeforeTest
 	public void mySetup() {
 
 		driver.manage().window().maximize();
 		driver.get(Website);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+		
 	}
 
 	@Test(priority = 1, description = "Radio Button", invocationCount = 1, enabled = false)
@@ -101,7 +111,7 @@ public class MyTestCases {
 
 	}
 
-	@Test(priority = 4, description = "check box example", invocationCount = 1, enabled = true)
+	@Test(priority = 4, description = "check box example", invocationCount = 1, enabled = false)
 	public void Checkbox_Example() throws InterruptedException {
 
 		List<WebElement> CheckBoxes = driver.findElements(By.xpath("//input[@type= 'checkbox']"));
@@ -119,11 +129,10 @@ public class MyTestCases {
 		// to select them all
 		for (int i = 0; i < CheckBoxes.size(); i++) {
 			CheckBoxes.get(i).click();
-			boolean ActualResult = 	CheckBoxes.get(i).isSelected();
-			boolean expectedReslut =  true ;
-			
-			Assert.assertEquals(ActualResult, expectedReslut);
+			boolean ActualResult = CheckBoxes.get(i).isSelected();
+			boolean expectedReslut = true;
 
+			Assert.assertEquals(ActualResult, expectedReslut);
 
 		}
 
@@ -228,7 +237,7 @@ public class MyTestCases {
 		myAssertion.assertEquals(theTEXXXXXTINPUT.isDisplayed(), false);
 
 		Thread.sleep(4000);
-
+		
 		ShowButton.click();
 		Assert.assertEquals(theTEXXXXXTINPUT.isDisplayed(), true);
 
@@ -236,7 +245,103 @@ public class MyTestCases {
 
 	}
 
-	@Test(priority = 10, enabled = false)
+	@Test(priority = 10, description = "check The Both Buttons disable , enable" , enabled = false)
+	public void Enabled_Disabled_Example() throws InterruptedException {
+		
+		WebElement DisabledButton = driver.findElement(By.id("disabled-button"));
+		WebElement EnabledButton = driver.findElement(By.id("enabled-button"));
+
+		DisabledButton.click();
+
+		WebElement enabled_example_input = driver.findElement(By.id("enabled-example-input"));
+
+		boolean ActucalResult = enabled_example_input.isEnabled();
+
+		boolean ExpectedResult = false;
+
+		Assert.assertEquals(ActucalResult, ExpectedResult);
+		
+		Thread.sleep(1000);
+		EnabledButton.click();
+		boolean ActualResult2 = enabled_example_input.isEnabled();
+		enabled_example_input.sendKeys("123");
+		boolean ExpectedResult2 = true ; 
+		
+		Assert.assertEquals(ActualResult2, ExpectedResult2);	
+	}
+	
+	@Test(priority = 11, description = "check the hover to certain element" , enabled = false)
+	public void Mouse_Hover_Example() throws InterruptedException {
+		
+		Js.executeScript("window.scrollTo(0,1800)");
+		Thread.sleep(2000);
+		
+
+		WebElement MouseHoverElement = driver.findElement(By.id("mousehover"));
+		
+		action.moveToElement(MouseHoverElement).perform();
+				
+		//driver.findElement(By.linkText("Top")).click();
+		driver.findElement(By.partialLinkText("Reload")).click();
+
+	}
+	
+	@Test(priority = 12 , description = "open calendar in a new tab" , enabled = false)
+	public void Calendar_Example() throws InterruptedException {
+		
+		Js.executeScript("window.scrollTo(0,1900)");
+
+		//WebElement Calednar2 = driver.findElement(By.linkText("Booking Calendar"));
+		WebElement Calednar2 = driver.findElement(By.partialLinkText("Booking Calendar"));
+
+		Calednar2.click();
+		Thread.sleep(1000);
+		
+		 List<String> windowsHandels = new ArrayList<String>(driver.getWindowHandles());
+			driver.switchTo().window(windowsHandels.get(1));
+			
+			System.out.println(driver.getTitle());
+			
+			int totalAvailbleDates = driver.findElements(By.className("date_available")).size();
+			driver.findElements(By.className("date_available")).get(0).click();
+			driver.findElements(By.className("date_available")).get(totalAvailbleDates -1).click();	
+	
+	}
+
+
+
+	@Test(priority = 13,description = "switch to frame insdie the main page" , enabled = false)
+	public void iFrame_Example() {
+		
+		WebElement theFrame = driver.findElement(By.id("courses-iframe"));
+		//by index
+		driver.switchTo().frame(0);
+		//by id
+		driver.switchTo().frame("courses-iframe");
+		//by webelement
+		driver.switchTo().frame(theFrame);
+
+		
+		String theText = driver.findElement(By.xpath("//*[@id=\"ct_text_editor-be8c5ad\"]/div/div/p")).getText();
+		
+		System.out.println(theText);
+	}
+
+	
+	
+	@Test(priority = 14,description = "download the file inside the main page" , enabled = false)
+	public void Download_file_to_test() {
+		
+		//WebElement TheFile = driver.findElement(By.xpath("//a[@href='http://codenboxautomationlab.com/wp-content/uploads/2022/12/APKFiles-1.zip']"));
+		//WebElement TheFile = driver.findElement(By.cssSelector(".wp-block-button__link.wp-element-button"));
+		WebElement TheFile = driver.findElement(By.xpath("//a[@class='wp-block-button__link wp-element-button']"));
+             
+		TheFile.click();
+	
+	}
+	
+
+	@Test(priority = 15, enabled = false)
 	public void CheckTheTitle() {
 
 		String expected = "Automation Practice - CodenBox AutomationLab";
@@ -246,5 +351,7 @@ public class MyTestCases {
 		Assert.assertEquals(ActualTitle, expected);
 
 	}
+	
+	//erf3o git hub
 
 }
